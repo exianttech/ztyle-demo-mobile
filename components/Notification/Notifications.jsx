@@ -1,12 +1,11 @@
-import { ScrollView, Text } from 'react-native';
 import React, { useState } from 'react';
-import { SafeAreaView } from 'react-native';
+import { ScrollView, Text } from 'react-native';
 
 // data
 import { notificationsData } from '@/data/notificationsData';
 
 // styles
-import styles from '@/styles/componentStyles';
+import styles from '@/styles/styles';
 
 // components
 import SingleNotification from './SingleNotification';

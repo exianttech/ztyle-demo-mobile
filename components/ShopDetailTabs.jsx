@@ -1,21 +1,21 @@
-import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
-import React, { useState } from 'react';
 import { Link } from 'expo-router';
+import React, { useState } from 'react';
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 // styles
-import styles from '@/styles/componentStyles';
+import styles from '@/styles/styles';
 
 // images
 import storeImage from '@/assets/images/shops/store.png';
 
 // utils
 import extractActiveDays from '@/utils/extractActiveDays';
-import getStandardTime from '@/utils/getStandardTime';
 import getAddressLines from '@/utils/getAddressLines';
+import getStandardTime from '@/utils/getStandardTime';
 
 // components
-import ShopMenu from './ShopMenu/ShopMenu';
 import ShopReviews from './Reviews/ShopReviews/ShopReviews';
+import ShopMenu from './ShopMenu/ShopMenu';
 
 const shopDetailTabs = ({ shop }) => {
 
@@ -215,7 +215,7 @@ const shopDetailTabs = ({ shop }) => {
                                 <View style={styles.alertContainer}>
                                     <View style={[styles.alert, styles.success]}>
                                         <Text style={[styles.alertText, styles.alertTextBold]}>Beauticians Associated With The Shop</Text>
-                                        <Link href={`/(screensUser)/BeauticiansByShopId/${shopId}`}><Text style={styles.alertText}>see the list</Text></Link>
+                                        <Link href={`/(screens)/BeauticiansByShopId/${shopId}`}><Text style={styles.alertText}>see the list</Text></Link>
                                     </View>
                                 </View>
                             </View>
@@ -257,9 +257,9 @@ const shopDetailTabs = ({ shop }) => {
                         <TouchableOpacity
                             key={idx}
                             onPress={() => setactiveTab(tab.key)}
-                            style={[styles.tab, activeTab === tab.key && styles.activeTabUser]}
+                            style={[styles.tab, activeTab === tab.key && styles.activeTab]}
                         >
-                            <Text style={[styles.tabText, activeTab === tab.key && styles.activeTabTextUser]}>
+                            <Text style={[styles.tabText, activeTab === tab.key && styles.activeTabText]}>
                                 {tab.label}
                             </Text>
 

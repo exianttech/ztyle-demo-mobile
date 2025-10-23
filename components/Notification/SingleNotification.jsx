@@ -1,5 +1,5 @@
-import { View, Text } from 'react-native';
 import React, { useEffect, useState } from 'react';
+import { Text, View } from 'react-native';
 
 // data
 import { monthdata } from '@/data/monthData';
@@ -9,7 +9,7 @@ import getInitials from '@/utils/getInitials';
 import getStandardTime from '@/utils/getStandardTime';
 
 // styles
-import styles from '@/styles/componentStyles';
+import styles from '@/styles/styles';
 
 
 const SingleNotification = ({ not }) => {

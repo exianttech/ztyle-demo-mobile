@@ -1,7 +1,7 @@
-import { View, Text, TouchableOpacity } from 'react-native';
-import React from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import React from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 // data
 import { monthdata } from '@/data/monthData';
@@ -11,7 +11,7 @@ import { bookingStatusConfig } from '@/config/bookingStatusConfig';
 
 
 // styles
-import styles from '@/styles/componentStyles';
+import styles from '@/styles/styles';
 
 // utils
 import getStandardTime from '@/utils/getStandardTime';
@@ -54,7 +54,7 @@ const SingleBookingList = ({ booking }) => {
             <View style={[styles.buttonContainer, { marginTop: 16 }]}>
                 <TouchableOpacity
                     style={[styles.buttonLarge, styles[config.variant]]}
-                    onPress={() => router.push(`(screensUser)/CurrentBooking/${_id}`)}
+                    onPress={() => router.push(`(screens)/CurrentBooking/${_id}`)}
                 >
                     <FontAwesome5 name={config.icon} size={18} color="#fff" />
                     <Text style={[styles.buttonText, { paddingLeft: 8 }]}>{config.text}</Text>

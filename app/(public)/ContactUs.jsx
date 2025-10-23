@@ -1,10 +1,10 @@
-import { View, Text, ScrollView, Image } from 'react-native';
-import React from 'react';
 import { FontAwesome } from '@expo/vector-icons';
+import React from 'react';
+import { Image, ScrollView, Text, View } from 'react-native';
 
 
 // styles
-import styles from '@/styles/generalStyles';
+import styles from '@/styles/styles';
 
 // images
 import contactimg from '@/assets/images/pages/contactimg.png';

@@ -1,12 +1,12 @@
-import { View } from 'react-native';
 import React from 'react';
+import { View } from 'react-native';
 
 // styles
-import styles from '@/styles/componentStyles';
+import styles from '@/styles/styles';
 
 // components
-import NavHader from './NavHader';
 import Header from './Header';
+import NavHader from './NavHader';
 import Start from './Start';
 
 const index = () => {

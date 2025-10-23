@@ -1,10 +1,10 @@
-import { View, Text,TouchableOpacity } from 'react-native'
-import React from 'react'
 import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import React from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
 
 // styles
-import styles from '@/styles/componentStyles' 
+import styles from '@/styles/styles';
 
 const Header = () => {
   const router = useRouter();

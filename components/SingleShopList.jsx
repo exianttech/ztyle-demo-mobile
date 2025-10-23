@@ -1,10 +1,10 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native';
-import React from 'react';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import React from 'react';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 
 // styles
-import styles from '@/styles/componentStyles';
+import styles from '@/styles/styles';
 
 const SingleShopList = ({ shop }) => {
     const router = useRouter();
@@ -31,8 +31,8 @@ const SingleShopList = ({ shop }) => {
                     <Text style={[styles.buttonText, { paddingLeft: 8 }]}>Book A Service</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    style={[styles.buttonLarge, styles.primary]}
-                    onPress={() => router.push(`(screensUser)/shopDetails/${_id}`)}
+                    style={[styles.buttonLarge, styles.primary, { marginLeft: 8 }]}
+                    onPress={() => router.push(`(screens)/shopDetails/${_id}`)}
                 >
                     <FontAwesome name='info' size={16} color="#fff" />
                     <Text style={[styles.buttonText, { paddingLeft: 8 }]}>Shop Details</Text>

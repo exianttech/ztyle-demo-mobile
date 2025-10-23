@@ -1,12 +1,12 @@
-import { Image, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
 import React from 'react';
-import { useRouter} from 'expo-router';
+import { Image, TouchableOpacity } from 'react-native';
 
 // images 
-import logo from '@/assets/images/logo_header.png'
+import logo from '@/assets/images/logo_header.png';
 
 // style
-import styles from '@/styles/componentStyles';
+import styles from '@/styles/styles';
 
 const NavHader = () => {
 

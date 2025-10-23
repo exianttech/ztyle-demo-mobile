@@ -1,11 +1,11 @@
-import { View, Text ,Image} from 'react-native'
-import React from 'react'
+import React from 'react';
+import { Image, Text, View } from 'react-native';
 
 // data
 import { monthdata } from '@/data/monthData';
 
 // styles
-import styles from '@/styles/componentStyles';
+import styles from '@/styles/styles';
 
 const SingleRec = ({ shop }) => {
   

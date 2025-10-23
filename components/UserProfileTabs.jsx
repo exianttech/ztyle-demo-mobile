@@ -1,18 +1,18 @@
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
 import { Link } from 'expo-router';
+import React, { useState } from 'react';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 // data
 import { monthdata } from '@/data/monthData';
 
 // styles
-import styles from '@/styles/componentStyles';
+import styles from '@/styles/styles';
 
 // utils
 import getAddressLines from '@/utils/getAddressLines';
 
 // components
-import UserModal from './Modals/UserModal';
+import BasicModal from './Modals/BasicModal';
 
 const UserProfileTabs = ({ profile }) => {
     
@@ -100,7 +100,7 @@ const UserProfileTabs = ({ profile }) => {
                                 <View style={styles.alertContainer}>
                                     <View style={[styles.alert, styles.secondary]}>
                                         <Text style={[styles.alertText, styles.alertTextBold]}>Edit Your Basic Profile</Text>
-                                        <Link href='/(formsUser)/AddBasicProfile'>
+                                        <Link href='/(forms)/AddBasicProfile'>
                                             <Text style={styles.alertText}>click here to edit your basic profile</Text>
                                         </Link>
                                     </View>
@@ -116,7 +116,7 @@ const UserProfileTabs = ({ profile }) => {
                                             <Text style={styles.alertText}>click here to delete your profile</Text>
                                         </TouchableOpacity>
                                         {/* Modal */}
-                                        <UserModal
+                                        <BasicModal
                                             visible={modalVisible}
                                             onClose={() => setmodalVisible(false)}
                                             onConfirm={handleDelete}
@@ -150,9 +150,9 @@ const UserProfileTabs = ({ profile }) => {
                         <TouchableOpacity
                             key={idx}
                             onPress={() => setactiveTab(tab.key)}
-                            style={[styles.tab, activeTab === tab.key && styles.activeTabUser]}
+                            style={[styles.tab, activeTab === tab.key && styles.activeTab]}
                         >
-                            <Text style={[styles.tabText, activeTab === tab.key && styles.activeTabTextUser]}>
+                            <Text style={[styles.tabText, activeTab === tab.key && styles.activeTabText]}>
                                 {tab.label}
                             </Text>
 

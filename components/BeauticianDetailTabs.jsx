@@ -1,19 +1,18 @@
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
-import { Link } from 'expo-router';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 // data
 import { monthdata } from '@/data/monthData';
 
 // styles
-import styles from '@/styles/componentStyles';
+import styles from '@/styles/styles';
 
 // utils
 import extractActiveDays from '@/utils/extractActiveDays';
 
 // components
-import Slots from './Slots/Slots';
 import BeauticianReviews from './Reviews/BeauticianReviews/BeauticianReviews';
+import Slots from './Slots/Slots';
 
 const BeauticianDetailTabs = ({beautician}) => {
 
@@ -187,9 +186,9 @@ const BeauticianDetailTabs = ({beautician}) => {
                         <TouchableOpacity
                             key={idx}
                             onPress={() => setactiveTab(tab.key)}
-                            style={[styles.tab, activeTab === tab.key && styles.activeTabUser]}
+                            style={[styles.tab, activeTab === tab.key && styles.activeTab]}
                         >
-                            <Text style={[styles.tabText, activeTab === tab.key && styles.activeTabTextUser]}>
+                            <Text style={[styles.tabText, activeTab === tab.key && styles.activeTabText]}>
                                 {tab.label}
                             </Text>
                         </TouchableOpacity>

@@ -1,9 +1,9 @@
-import { View, Text, Linking, TouchableOpacity } from 'react-native';
-import React from 'react';
 import { Link } from 'expo-router';
+import React from 'react';
+import { Linking, Text, TouchableOpacity, View } from 'react-native';
 
 // style
-import styles from '@/styles/componentStyles';
+import styles from '@/styles/styles';
 
 
 const FooterPublic = () => {

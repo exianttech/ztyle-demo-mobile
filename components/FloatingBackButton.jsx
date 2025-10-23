@@ -1,10 +1,10 @@
-import { TouchableOpacity, Text } from 'react-native';
-import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import React from 'react';
+import { TouchableOpacity } from 'react-native';
 
 // styles
-import styles from '@/styles/componentStyles';
+import styles from '@/styles/styles';
 
 
 const FloatingBackButton = ({ fallback = '/' }) => {

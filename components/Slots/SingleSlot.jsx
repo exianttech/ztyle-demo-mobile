@@ -1,8 +1,8 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React from 'react';
+import { Text, View } from 'react-native';
 
 // styles
-import styles from '@/styles/componentStyles';
+import styles from '@/styles/styles';
 
 // utils
 import getStandardTime from '@/utils/getStandardTime';

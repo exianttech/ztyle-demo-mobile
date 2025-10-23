@@ -1,9 +1,9 @@
-import { View } from 'react-native';
-import React from 'react';
 import { FontAwesome } from '@expo/vector-icons';
+import React from 'react';
+import { View } from 'react-native';
 
 // styles
-import styles from '@/styles/componentStyles';
+import styles from '@/styles/styles';
 
 
 const Rating = ({ rating = 0, size = 16, color = "#FFBC39" }) => {
