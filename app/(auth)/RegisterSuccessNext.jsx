@@ -28,7 +28,7 @@ const RegisterUserSuccessNext = () => {
                       <View style={styles.alertContainer}>
                           <View style={[styles.alert, styles.secondary]} >
                               <Text style={[styles.alertText, styles.textBold]} > Your Registration is successful</Text>
-                              <Link href='/(auth)/LoginUser'>
+                              <Link href='/(auth)/Login'>
                                   <Text style={styles.alertText}>please login again</Text>
                               </Link>                                                         
                           </View>
@@ -37,7 +37,7 @@ const RegisterUserSuccessNext = () => {
               </View>
               <Text style={[styles.textGray ,styles.textCenter]}>
                   please click to {" "}
-                  <Link href='/(auth)/LoginUser'>
+                  <Link href='/(auth)/Login'>
                       <Text style={styles.textSecondary}> Log in</Text>
                   </Link>
               </Text>

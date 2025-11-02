@@ -1,7 +1,10 @@
-import { FontAwesome } from '@expo/vector-icons';
-import { Link } from 'expo-router';
-import React, { useState } from 'react';
 import { Image, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { FontAwesome } from '@expo/vector-icons';
+import { Link, useRouter } from 'expo-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { showMessage } from 'react-native-flash-message';
+
 
 // images
 import ztyleSvg from '@/assets/images/ztyle_svg.png';
@@ -10,12 +13,85 @@ import ztyleSvg from '@/assets/images/ztyle_svg.png';
 import styles from '@/styles/styles';
 
 // components
+import Error from '@/components/Error';
+import EmailValidator from '@/components/EmailValidator';
+import Spinner from '@/components/SpinnerWhite';
+
+// actions
+import { registerUser } from '@/store/auth/authActions';
+
 
 const RegisterUser = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  // redux states
+  const { loading, userInfo, error, success } = useSelector(state => state.auth);
+
 
   // field accessories
   const [focusField, setfocusField] = useState(null);
   const [isPasswordVisible, setisPasswordVisible] = useState(false);
+  
+  // fields
+  const [fullName, setfullName] = useState('');
+  const [email, setemail] = useState('');
+  const [password, setpassword] = useState('');
+
+  // error field for validation
+  let errorsObj = { fullName: '', email: '', password: '' };
+  const [errors, setErrors] = useState(errorsObj);
+  
+  const handleRegister = () => {
+    // front end validation
+    let error = false;
+    const errorObj = { ...errorsObj };
+
+    if (fullName === '') {
+      errorObj.fullName = "Full name is required";
+      error =true
+    }
+    if (email === '') {
+      errorObj.email = "email is required";
+      error =true
+    }
+    if (password === '') {
+      errorObj.password = "Password is required";
+      error =true
+    }
+    if (email && !EmailValidator(email)) {
+      errorObj.email = "Invalid email format";
+      error =true
+    }
+
+    setErrors(errorObj)
+    if (error) {
+      return;
+    }
+
+    const data = { fullName, email, password };
+    dispatch(registerUser(data))
+    
+  }
+
+  useEffect(() => {
+    if (userInfo) {
+      showMessage({
+        message: "User Exists Already",
+        type: 'info'
+      })
+      router.push('/(tabs)/Dashboard');
+    }
+
+    if (success && !error) {
+      showMessage({
+        message: "Registration Success",
+        type: 'success'
+      })
+      router.push('/(auth)/RegisterSuccessNext')
+    }
+    
+  }, [error, router, success, userInfo]);
   
 
   return (
@@ -33,9 +109,14 @@ const RegisterUser = () => {
               source={ztyleSvg}
               style={styles.authBgImage}
             />
-            <Text style={styles.subHeading}>Sign up your account</Text>
+            <View style={styles.dividerContainer}>
+              <View style={styles.line} />
+              <Text style={[styles.subHeading, styles.textCenter, { color: '#777' }, styles.textShadow]}>Sign up your account</Text>
+              <View style={styles.line} />
+            </View>
+            
           </View>
-          {/* <Error>Error Text</Error> */}
+          <Error>{ error}</Error>
           
           <View style={styles.authFormContainer}>
             <View style={styles.formGroup}>
@@ -48,9 +129,10 @@ const RegisterUser = () => {
                 autoCorrect={false}
                 onFocus={() => setfocusField('fullName')}
                 onBlur={() => setfocusField(null)}
-                
+                value={fullName}
+                onChangeText={setfullName}
               />
-              {/* <Text style={[styles.textDanger,{fontSize:12}]}>error</Text> */}
+              {errors.fullName && <Text style={[styles.textDanger, { fontSize: 12 }]}>{errors.fullName}</Text>}  
             </View>
             <View style={styles.formGroup}>
               <Text style={[styles.formGroupLabel, styles.textShadow]}>Email </Text>
@@ -63,9 +145,10 @@ const RegisterUser = () => {
                 autoCorrect={false}
                 onFocus={() => setfocusField('email')}
                 onBlur={() => setfocusField(null)}
-                
+                value={email}
+                onChangeText={setemail}  
               />
-              {/* <Text style={[styles.textDanger,{fontSize:12}]}>error</Text> */}
+              {errors.email && <Text style={[styles.textDanger, { fontSize: 12 }]}>{errors.email}</Text>}
             </View>
             <View style={styles.formGroup}>
               <Text style={[styles.formGroupLabel, styles.textShadow]}>Password </Text>
@@ -78,11 +161,12 @@ const RegisterUser = () => {
                   placeholder='**************'
                   placeholderTextColor='gray'
                   secureTextEntry={!isPasswordVisible}
-                  autoCapitalize='words'
+                  autoCapitalize='none'
                   autoCorrect={false}
                   onFocus={() => setfocusField('password')}
                   onBlur={() => setfocusField(null)}
-                
+                  value={password}
+                  onChangeText={setpassword}
                 />
                 <TouchableOpacity
                   style={styles.iconContainer}
@@ -95,12 +179,23 @@ const RegisterUser = () => {
                   />
                 </TouchableOpacity>
               </View>
-              {/* <Text style={[styles.textDanger,{fontSize:12}]}>error</Text> */}
+              {errors.password && <Text style={[styles.textDanger, { fontSize: 12 }]}>{errors.password}</Text>}
             </View>
             {/* Submit section*/ }
             <View style={{ marginVertical: 40 }}>
-              <TouchableOpacity style={[styles.buttonLarge, styles.secondary]}>
-                <Text style={styles.buttonText}> Sign me up </Text>
+              <TouchableOpacity
+                style={[styles.buttonLarge, styles.secondary]}
+                activeOpacity={0.8}
+                onPress={handleRegister}
+              >
+                {
+                  loading ?
+                    <Spinner /> :
+                    <Text style={styles.buttonText}>
+                      Sign me up
+                    </Text>
+                }
+                
               </TouchableOpacity>
             </View>
             <Text style={styles.textGray}>

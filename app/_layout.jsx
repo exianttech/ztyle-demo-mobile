@@ -4,7 +4,11 @@ import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 import { useEffect } from 'react';
+import FlashMessage from 'react-native-flash-message';
 
+// redux
+import { Provider } from 'react-redux';
+import { store } from '@/store';
 
 export default function RootLayout() {
 
@@ -29,9 +33,15 @@ export default function RootLayout() {
 
   
   return (
-    <SafeAreaProvider>
-      <StatusBar style="dark" />
-      <Stack screenOptions={{ headerShown: false }} />
-    </SafeAreaProvider>
+    <Provider store={store}>
+      <SafeAreaProvider>
+        <StatusBar style="dark" />
+        <Stack screenOptions={{ headerShown: false }} />
+        <FlashMessage
+          position='top'
+        />
+      </SafeAreaProvider>
+    </Provider>
+    
   )
 }

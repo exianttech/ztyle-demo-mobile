@@ -1,6 +1,8 @@
-import { useRouter } from 'expo-router';
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
+
+
 
 // styles
 import styles from '@/styles/styles';
@@ -9,8 +11,10 @@ import styles from '@/styles/styles';
 import heroImage from '@/assets/images/pages/landingpageimage.jpg';
 
 // components
-import FooterPublic from "@/components/FooterPublic";
 import NavbarPublic from '@/components/NavbarPublic';
+import FooterPublic from "@/components/FooterPublic";
+
+
 
 export default function Index() {
   const router = useRouter();
@@ -58,7 +62,7 @@ export default function Index() {
                       <View style={styles.buttonContainer}>
                         <TouchableOpacity
                           style={[styles.buttonLink, styles.secondary]}
-                          onPress={() => router.replace('/(auth)/Register')}
+                          onPress={() => router.replace('/(auth)/GetStarted')}
                         >
                           <Text style={styles.buttonText}>Get Started</Text>
                         </TouchableOpacity>

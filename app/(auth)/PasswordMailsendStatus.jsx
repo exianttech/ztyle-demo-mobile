@@ -1,5 +1,7 @@
 import React from 'react';
 import { Image, ScrollView, Text, View } from 'react-native';
+import { Link } from 'expo-router';
+
 
 // images
 import ztyleSvg from '@/assets/images/ztyle_svg.png';
@@ -34,6 +36,13 @@ const PasswordMailsendStatusUser = () => {
                       </View>
                   </View>
               </View>
+              <Text style={[styles.textGray ,styles.textCenter]}>
+                  please click to {" "}
+                  <Link href='/(auth)/Login'>
+                      <Text style={styles.textSecondary}> Log in</Text>
+                  </Link>
+                  {" "} again 
+              </Text>
           </View>
       </ScrollView>
     )

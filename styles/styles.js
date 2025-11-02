@@ -163,6 +163,27 @@ const styles = StyleSheet.create({
         shadowRadius: 3,
     },
 
+    // divider
+    dividerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginVertical: 20,
+    },
+    line: {
+        flex: 1,
+        height: 1,
+        backgroundColor: '#ccc',
+        marginHorizontal: 10
+    },
+    whiteLine: {
+        flex: 1,
+        height: 1,
+        backgroundColor: '#fff',
+        marginHorizontal: 10
+    },
+
+
     // alerts
     alertContainer: {
         justifyContent: 'center',
@@ -292,8 +313,8 @@ const styles = StyleSheet.create({
         marginBottom: 24
     },
     authBgImage: {
-        width: 250,
-        height: 100,
+        width: 200,
+        height: 80,
         marginBottom: 16
     },
     loginBgImage: {

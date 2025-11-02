@@ -1,6 +1,8 @@
-import { FontAwesome, FontAwesome6 } from '@expo/vector-icons';
-import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
+import React from 'react';
+import { FontAwesome, FontAwesome6 } from '@expo/vector-icons';
+
+
 
 // styles
 import styles from '@/styles/styles';

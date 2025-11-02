@@ -1,7 +1,10 @@
-import { FontAwesome } from '@expo/vector-icons';
-import { Link } from 'expo-router';
-import React, { useState } from 'react';
 import { Image, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { FontAwesome } from '@expo/vector-icons';
+import { Link, useRouter } from 'expo-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { showMessage } from 'react-native-flash-message';
+
 
 // images
 import fullLogo from '@/assets/images/full_logo.png';
@@ -10,12 +13,71 @@ import fullLogo from '@/assets/images/full_logo.png';
 import styles from '@/styles/styles';
 
 // components
+import EmailValidator from '@/components/EmailValidator';
+import Spinner from '@/components/SpinnerWhite';
+import Error from '@/components/Error';
+
+// actions
+import { userLogin } from '@/store/auth/authActions';
+
 
 const LoginUser = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  // redux state
+  const { loading, userInfo, error } = useSelector(state => state.auth);
+  
+  // console.log(loading, userInfo, error);
+
 
   // field accessories
   const [focusField, setfocusField] = useState(null);
   const [isPasswordVisible, setisPasswordVisible] = useState(false);
+
+  // fields
+  const [email, setemail] = useState('');
+  const [password, setpassword] = useState('');
+
+  // error field for validation
+  let errorsObj = { email: '', password: '' };
+  const [errors, setErrors] = useState(errorsObj);
+
+  const handleLogin = () => {
+    // front end validation
+    let error = false;
+    const errorObj = { ...errorsObj };
+    if (email === '') {
+      errorObj.email = "email is required";
+      error =true
+    }
+    if (password === '') {
+      errorObj.password = "Password is required";
+      error =true
+    }
+    if (email && !EmailValidator(email)) {
+      errorObj.email = "Invalid email format";
+      error =true
+    }
+
+    setErrors(errorObj)
+    if (error) {
+      return;
+    }
+    const data = { email, password };
+    dispatch(userLogin(data));
+  }
+
+  useEffect(() => {
+    if (userInfo) {
+      showMessage({
+        message: "You Are Now Logged In",
+        type: 'info'
+      })
+      router.push('/(tabs)/Dashboard')
+    }
+  }, [router, userInfo]);
+  
 
   return (
     <KeyboardAvoidingView
@@ -36,23 +98,29 @@ const LoginUser = () => {
 
         </View>
         <View style={[{ paddingVertical: 24 }, styles.authBackground]}>
-          {/* <Error>The Error</Error> */}
-          <Text style={[styles.subHeading,styles.textCenter,{fontSize:24,marginBottom:16}]}>Sign up your account</Text>
+          <Error>{error}</Error>
+          <View style={styles.dividerContainer}>
+            <View style={styles.whiteLine} />
+            <Text style={[styles.subHeading, styles.textCenter, { color: '#fff' }]}>Login to your account</Text>
+            <View style={styles.whiteLine} />
+          </View>
           <View style={styles.authFormContainer}>
 
             <View style={styles.formGroup}>
               <Text style={[styles.formGroupLabel, styles.textShadow]}>Email</Text>
               <TextInput
-                style={[styles.formGroupTextInput, focusField === 'fullName' && styles.formGroupTextInputFocused]}
-                placeholder='Your Full Name'
+                style={[styles.formGroupTextInput, focusField === 'email' && styles.formGroupTextInputFocused]}
+                placeholder='Enter Registered email'
                 placeholderTextColor='gray'
-                autoCapitalize='words'
+                autoCapitalize='none'
+                keyboardType='email-address'
                 autoCorrect={false}
-                onFocus={() => setfocusField('fullName')}
+                onFocus={() => setfocusField('email')}
                 onBlur={() => setfocusField(null)}
-                
+                value={email}
+                onChangeText={setemail}  
               />
-              {/* <Text style={[styles.textDanger,{fontSize:12}]}>error</Text> */}
+              {errors.email && <Text style={[styles.textDanger, { fontSize: 12 }]}>{errors.email}</Text>}
 
             </View>
             <View style={styles.formGroup}>
@@ -66,11 +134,12 @@ const LoginUser = () => {
                   placeholder='**************'
                   placeholderTextColor='gray'
                   secureTextEntry={!isPasswordVisible}
-                  autoCapitalize='words'
+                  autoCapitalize='none'
                   autoCorrect={false}
                   onFocus={() => setfocusField('password')}
                   onBlur={() => setfocusField(null)}
-                
+                  value={password}
+                  onChangeText={setpassword}
                 />
                 <TouchableOpacity
                   style={styles.iconContainer}
@@ -83,7 +152,7 @@ const LoginUser = () => {
                   />
                 </TouchableOpacity>
               </View>
-              {/* <Text style={[styles.textDanger,{fontSize:12}]}>error</Text> */}
+              {errors.password && <Text style={[styles.textDanger, { fontSize: 12 }]}>{errors.password}</Text>}
             </View>
             <Text style={[styles.textGray,{marginTop:16}]}>
               forgot password?{" "}
@@ -93,8 +162,18 @@ const LoginUser = () => {
             </Text>
 
             <View style={{ marginBottom: 10,marginTop:20 }}>
-              <TouchableOpacity style={[styles.buttonLarge, styles.secondary]}>
-                <Text style={styles.buttonText}> Login </Text>
+              <TouchableOpacity
+                style={[styles.buttonLarge, styles.secondary]}
+                activeOpacity={0.8}
+                onPress={handleLogin}
+              >
+                {
+                  loading ?
+                    <Spinner /> :
+                    <Text style={styles.buttonText}> Login </Text>
+                }
+                
+                
               </TouchableOpacity>
             </View>
             <Text style={styles.textGray}>
