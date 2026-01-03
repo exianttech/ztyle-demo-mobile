@@ -5,7 +5,7 @@ import {
     registerUser,
     userLogin,
     requestResetPassword
-} from './authActions'
+} from './authActions';
 
 const initialState = {
     loading: false,
@@ -32,6 +32,7 @@ const authSlice = createSlice({
             })
             .addCase(registerUser.fulfilled, (state) => {
                 state.loading = false
+                state.error = null
                 state.success = true
             })
             .addCase(registerUser.rejected, (state, { payload }) => {
@@ -52,6 +53,7 @@ const authSlice = createSlice({
                 state.token = payload.token
                 state.error = null
                 state.success = false
+                
             })
             .addCase(userLogin.rejected, (state, { payload }) => {
                 state.loading = false;
@@ -68,7 +70,7 @@ const authSlice = createSlice({
             .addCase(requestResetPassword.fulfilled, (state, { payload }) => {
                 state.loading = false;
                 state.message = payload.message
-                state.error = false
+                state.error = null
                 state.success = false
             })
             .addCase(requestResetPassword.rejected, (state, { payload }) => {

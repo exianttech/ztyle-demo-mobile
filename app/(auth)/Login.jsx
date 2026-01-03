@@ -28,8 +28,6 @@ const LoginUser = () => {
   // redux state
   const { loading, userInfo, error } = useSelector(state => state.auth);
   
-  // console.log(loading, userInfo, error);
-
 
   // field accessories
   const [focusField, setfocusField] = useState(null);

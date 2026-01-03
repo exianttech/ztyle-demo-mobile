@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // urls
 import { Constants } from '@/config/constants';
@@ -21,8 +22,10 @@ export const registerUser = createAsyncThunk(
                 { fullName, email, password },
                 config
             )
+
+
             return data;
-            
+        
 
         }
         catch (err) {
@@ -48,7 +51,9 @@ export const userLogin = createAsyncThunk(
                 { email, password },
                 config
             )
-
+            
+            await AsyncStorage.setItem('token', data.token)
+            
             return data;
             
         }
@@ -70,7 +75,7 @@ export const requestResetPassword = createAsyncThunk(
         try {
 
             const { data } = await axios.post(
-                Constants.url_requestResetPassword,
+                Constants.url_request_reset_password,
                 { email },
                 config
             )

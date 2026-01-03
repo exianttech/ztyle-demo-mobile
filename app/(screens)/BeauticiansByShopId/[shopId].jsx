@@ -1,49 +1,88 @@
 import { useLocalSearchParams } from 'expo-router';
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { ScrollView, Text, View } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { showMessage } from 'react-native-flash-message';
 
-//data
-import { beauticiansData } from '@/data/beauticiansData';
 
 // styles
 import styles from '@/styles/styles';
 
+// actions
+import {
+    getBeauticiansByShopId
+} from '@/store/beautician/beauticianActions';
+
+
 // components
-import FloatingBackButton from '@/components/FloatingBackButton';
-import FooterUser from '@/components/Footer';
 import PageTitleUser from '@/components/PageTitle';
+import Spinner from '@/components/Spinner';
+import FloatingBackButton from '@/components/FloatingBackButton';
 import SingleBeauticianList from '@/components/SingleBeauticianList';
+import FooterUser from '@/components/Footer';
 
 const BeauticiansByShopId = () => {
     const { shopId } = useLocalSearchParams();
+    const dispatch = useDispatch();
+
+
+    // load shops on pressing screen
+    useFocusEffect(
+        useCallback(() => {
+            const searchData = { shopId }
+            dispatch(getBeauticiansByShopId({ searchData }))
+        }, [dispatch, shopId])
+    );
     
-    // beauticians of given shop 
-    const currentBeauticians = beauticiansData.filter(beautician => beautician.shopId === shopId);
+    // redux states
+    const { loading, beauticians, error } = useSelector(state => state.beautician);
     
-    return (
-        <View style={{ flex: 1 }}>
-            <ScrollView
-                style={styles.container}
-                contentContainerStyle={{ flexGrow: 1 }}
+    useEffect(() => {
+        if (error) {
+          showMessage({
+            message: error || 'An error occured',
+            type: 'danger'
+          })
+        }
+    }, [error]);
+
+    if (loading) {
+        return (
+            <View
+                style={[styles.container, { flex: 1 }]}
+                contentContainerStyle={styles.center}
             >
-                <PageTitleUser activeMenu="Selected Shop" motherMenu="Beauticians"/>
-                <View style={{ paddingVertical: 16, flex: 1 }}>
-                    {
-                        currentBeauticians.length ?// replace with redux/ actual data
-                            currentBeauticians.map((beautician, idx) => (
-                                <SingleBeauticianList key={idx} beautician={beautician} />
-                            ))
-                            :
-                            <Text style={[styles.textCenter, styles.textBold, styles.textWarning]}>No Beauticians In Shop</Text>
+                <Spinner />
+            </View>
+        )
+    }
+    else {
+        return (
+            <View style={{ flex: 1 }}>
+                <ScrollView
+                    style={styles.container}
+                    contentContainerStyle={{ flexGrow: 1 }}
+                >
+                    <PageTitleUser activeMenu="Selected Shop" motherMenu="Beauticians" />
+                    <View style={{ paddingVertical: 16, flex: 1 }}>
+                        {
+                            beauticians?.length ?
+                                beauticians.map((beautician, idx) => (
+                                    <SingleBeauticianList key={idx} beautician={beautician} />
+                                ))
+                                :
+                                <Text style={[styles.textCenter, styles.textBold, styles.textWarning]}>No Beauticians In Shop</Text>
                             
-                    }
-                </View>
-                <FooterUser />
-            </ScrollView>
-            <FloatingBackButton fallback='/(tabsUser)/Dashboard' />
-        </View>
+                        }
+                    </View>
+                    <FooterUser />
+                </ScrollView>
+                <FloatingBackButton fallback='/(tabsUser)/Dashboard' />
+            </View>
         
-    )
+        )
+    }
 }
 
 export default BeauticiansByShopId

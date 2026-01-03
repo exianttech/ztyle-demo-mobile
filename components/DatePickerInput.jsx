@@ -6,22 +6,33 @@ import { Platform, Text, TouchableOpacity, View } from 'react-native';
 import styles from '@/styles/styles';
 
 
-const DatePickerInput = ({ dob, setdob }) => {
+const DatePickerInput = ({
+    value,
+    onChange,
+    minDate,
+    maxDate,
+    placeholder = 'Not set'
+}) => {
+    
 
     const [show, setshow] = useState(false);
 
     const handleChange = (event, selectedDate) => {
-        setshow(Platform.OS === 'ios' || Platform.OS === 'web') // Keep picker open on iO
+        if (Platform.OS !== 'ios') {
+             setshow(false);
+        }
         if (selectedDate) {
-            setdob(selectedDate.toISOString().split('T')[0]) // Format: YYYY-MM-DD
+            onChange(selectedDate.toISOString().split('T')[0]) // Format: YYYY-MM-DD
         }
 
     }
+
     return (
         <View>
             <View style={styles.formGroupTextInput}>
-                <Text style={styles.formGroupLabel}>{dob || 'Not set'}</Text>
+                <Text style={styles.formGroupLabel}>{value || placeholder}</Text>
             </View>
+
             <TouchableOpacity
                 onPress={() => setshow(!show)}
                 style={[styles.buttonLarge, styles.secondary, styles.center, { marginVertical: 8 }]}
@@ -32,10 +43,11 @@ const DatePickerInput = ({ dob, setdob }) => {
                 show && (
                     <View style={styles.center}>
                         <DateTimePicker
-                            value={dob ? new Date(dob) : new Date()}
+                            value={value ? new Date(value) : new Date()}
                             mode='date'
                             display='default'
-                            maximumDate={new Date()} // optional: restrict future dates
+                            minimumDate={minDate}
+                            maximumDate={maxDate} 
                             onChange={handleChange}
                         />
                     </View>

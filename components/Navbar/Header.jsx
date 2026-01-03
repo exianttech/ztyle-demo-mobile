@@ -1,13 +1,33 @@
 import { TouchableOpacity, View } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FontAwesome, FontAwesome6 } from '@expo/vector-icons';
-
-
+import { useDispatch, useSelector } from 'react-redux';
 
 // styles
 import styles from '@/styles/styles';
 
-const Header = ({toggleNot}) => {
+// actions
+import { getNotifications } from '@/store/notification/notificationActions';
+
+
+const Header = ({ toggleNot }) => {
+  const dispatch = useDispatch();
+
+
+  // profile redux 
+  const { userInfo } = useSelector(state => state.auth);
+  
+  // notification
+	useEffect(() => {
+    if (userInfo) {
+          dispatch(getNotifications({ id: userInfo._id }));
+    }
+        
+  }, [dispatch, userInfo]);
+  
+  // notification redux
+  const { notifications } = useSelector(state => state.notification);
+
 
   return (
     <View style={styles.headerContainer}>
@@ -31,7 +51,13 @@ const Header = ({toggleNot}) => {
           <TouchableOpacity onPress={toggleNot}>
             <View style={[styles.headerIconsole]}>
               <FontAwesome name='bell-o' size={24} />
-              <View style={styles.notificationDot} />
+              {
+                notifications ?
+                  notifications.readStatus === "unread" ?
+                    <View style={styles.notificationDot} /> :
+                    "" :
+                  ""
+              }
             </View>
           </TouchableOpacity>
         </>

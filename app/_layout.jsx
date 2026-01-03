@@ -1,3 +1,4 @@
+import { ActivityIndicator } from 'react-native';
 import { Stack } from "expo-router";
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
@@ -8,7 +9,9 @@ import FlashMessage from 'react-native-flash-message';
 
 // redux
 import { Provider } from 'react-redux';
-import { store } from '@/store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from '@/store';
+
 
 export default function RootLayout() {
 
@@ -34,13 +37,13 @@ export default function RootLayout() {
   
   return (
     <Provider store={store}>
-      <SafeAreaProvider>
-        <StatusBar style="dark" />
-        <Stack screenOptions={{ headerShown: false }} />
-        <FlashMessage
-          position='top'
-        />
-      </SafeAreaProvider>
+      <PersistGate loading={<ActivityIndicator size="large" color="#20c997" />} persistor={persistor}>
+        <SafeAreaProvider>
+          <StatusBar style="dark" />
+          <Stack screenOptions={{ headerShown: false }} />
+          <FlashMessage position='top' />
+        </SafeAreaProvider>
+      </PersistGate>
     </Provider>
     
   )

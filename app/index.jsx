@@ -1,7 +1,8 @@
 import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-
+import { useSelector } from 'react-redux';
 
 
 // styles
@@ -18,6 +19,16 @@ import FooterPublic from "@/components/FooterPublic";
 
 export default function Index() {
   const router = useRouter();
+
+  // JWT 
+  const token = useSelector(state => state.auth.token);
+  
+  useEffect(() => {
+    if (token) {
+      router.replace('/(tabs)/Dashboard')
+    }
+  }, [router, token]);
+  
 
   return (
     <SafeAreaView>

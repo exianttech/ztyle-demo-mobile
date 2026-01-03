@@ -6,7 +6,7 @@ import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import styles from '@/styles/styles';
 
 // images
-import storeImage from '@/assets/images/shops/store.png';
+import defaultShopPic from '@/assets/images/shops/store.png';
 
 // utils
 import extractActiveDays from '@/utils/extractActiveDays';
@@ -26,7 +26,7 @@ const shopDetailTabs = ({ shop }) => {
     
     // advanced info
     const { category, address, menu,
-        shopImage } = shop;
+        shopImage, image1, image2 } = shop;
     
     
     // format to display
@@ -38,6 +38,35 @@ const shopDetailTabs = ({ shop }) => {
     
     // select tabs
     const [activeTab, setactiveTab] = useState("basicDetails");
+
+     // shop image  display handling
+    const [shopPicFailed, setshoPicFailed] = useState(false);
+        
+    const resolvedShopPic = shopPicFailed
+        ? defaultShopPic :
+        shopImage
+            ?
+            { uri: shopImage }
+            : defaultShopPic;
+    //image1  display handling
+    const [image1Failed, setimage1Failed] = useState(false);
+        
+    const resolvedImage1 = image1Failed
+        ? defaultShopPic :
+        image1
+            ?
+            { uri: image1 }
+            : defaultShopPic;
+    
+    //image1  display handling
+    const [image2Failed, setimage2Failed] = useState(false);
+        
+    const resolvedImage2 = image2Failed
+        ? defaultShopPic :
+        image2
+            ?
+            { uri: image2 }
+            : defaultShopPic;
     
     const renderedContent = () => {
         switch (activeTab) {
@@ -174,9 +203,15 @@ const shopDetailTabs = ({ shop }) => {
                         <View style={styles.cardShadow}>
                             <View style={styles.cardBody}>
                                 <Image
-                                    source={shopImage}
+                                    source={resolvedShopPic}
                                     style={styles.shopImage}
                                     resizeMode='cover'
+                                    onError={() => {
+                                        // fallback to default picture
+                                        console.log("Image failed — switching to default");
+                                        setshoPicFailed(true);
+                                        // setcurrentProfilePic("");   // reset local state
+                                    }}
                                 />
                                 <Text style={styles.cardBodySubHeading}>Main Shop Image</Text>
                                 <Text style={styles.textGray}>This is the primary view of the salon. It helps you quickly recognize the shop from the outside.</Text>
@@ -185,9 +220,15 @@ const shopDetailTabs = ({ shop }) => {
                         <View style={styles.cardShadow}>
                             <View style={styles.cardBody}>
                                 <Image
-                                    source={storeImage}
+                                    source={resolvedImage1}
                                     style={styles.shopImage}
                                     resizeMode='cover'
+                                    onError={() => {
+                                        // fallback to default picture
+                                        console.log("Image failed — switching to default");
+                                        setimage1Failed(true);
+                                        // setcurrentProfilePic("");   // reset local state
+                                    }}
                                 />
                                 <Text style={styles.cardBodySubHeading}>Inside View</Text>
                                 <Text style={styles.textGray}>Take a look at the interior setup and atmosphere. This gives you a feel of the salon’s comfort and vibe before you visit.</Text>
@@ -196,9 +237,15 @@ const shopDetailTabs = ({ shop }) => {
                         <View style={styles.cardShadow}>
                             <View style={styles.cardBody}>
                                 <Image
-                                    source={storeImage}
+                                    source={resolvedImage2}
                                     style={styles.shopImage}
                                     resizeMode='cover'
+                                    onError={() => {
+                                        // fallback to default picture
+                                        console.log("Image failed — switching to default");
+                                        setimage2Failed(true);
+                                        // setcurrentProfilePic("");   // reset local state
+                                    }}
                                 />
                                 <Text style={styles.cardBodySubHeading}>Service Preview</Text>
                                 <Text style={styles.textGray}>A glimpse of the services and facilities available inside. This helps you understand what to expect when booking.</Text>

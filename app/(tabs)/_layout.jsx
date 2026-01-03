@@ -1,13 +1,32 @@
-import { FontAwesome5, Ionicons } from '@expo/vector-icons';
-import { Tabs } from 'expo-router';
 import { View } from 'react-native';
+import { useEffect } from 'react';
+import { FontAwesome5, Ionicons } from '@expo/vector-icons';
+import { Tabs, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSelector } from 'react-redux';
 
 // components
 import NavbarUser from '@/components/Navbar';
 
+
+
 export default function tabsUserLayout() {
+
+    const router = useRouter();
+
+    // JWT
+    const token = useSelector(state => state.auth.token);
+
+     // redirect logic 
+    useEffect(() => {
+        if (!token) {
+            router.replace('/')
+        }
+    }, [router, token]);
     
+    if (!token) return null;
+
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={{ flex: 1 }}>

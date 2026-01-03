@@ -16,9 +16,9 @@ import Rating from '@/components/Rating';
 
 const SingleReview = ({ review }) => {
     
-    const { userFullName, rating, reviewText, updatedAt } = review
+    const { userId, rating, reviewText, updatedAt } = review
 
-    const initials = getInitials(userFullName);
+    const initials = getInitials("Premium User");
     
     // access slit date
     const date = new Date(updatedAt);
@@ -38,7 +38,7 @@ const SingleReview = ({ review }) => {
                     <Text style={[styles.notInitialsText, styles.textSecondary]}>{initials}</Text>
                 </View>
                 <View style={styles.listCardContent}>
-                    <Text style={[styles.listCardTitle, styles.textSecondary]}>{userFullName}</Text>
+                    <Text style={[styles.listCardTitle, styles.textSecondary]}>{userId}</Text>
                     <Rating rating={rating} />
                     <Text style={styles.listCardDate}>Review submitted on {Day}{" "}{monthdata[Month]}{" "},{" "} {Year} {" "} at {time}</Text>
                 </View>

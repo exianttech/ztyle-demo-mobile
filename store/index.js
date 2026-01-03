@@ -4,16 +4,50 @@ import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, R
 
 // reducers
 import authReducer from './auth/authSlice';
+import profileReducer from './profile/profileSlice';
+import shopReducer from './shop/shopSlice';
+import beauticianReducer from './beautician/beauticianSlice';
+import bookingReducer from './booking/bookingSlice';
+import paymentReducer from './payment/paymentSlice';
+import notificationReducer from './notification/notificationSlice';
+import reviewReducer from './review/reviewSlice'
 
+
+// config for store
+const persistConfig = {
+    storage: AsyncStorage,
+    key: 'root',
+    whitelist: ['auth'],
+    version: 1 
+}
 
 
 // combine all reducers to single 
 const rootReducer = combineReducers({
-    auth: authReducer
+    auth: authReducer,
+    profile: profileReducer,
+    shop: shopReducer,
+    beautician: beauticianReducer,
+    booking: bookingReducer,
+    payment: paymentReducer,
+    notification: notificationReducer,
+    review: reviewReducer
 })
 
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+
 export const store = configureStore({
-    reducer: rootReducer,
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: {
+                // Ignore these redux-persist actions
+                ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+            },
+        }),
     devTools: process.env.NODE_ENV !== 'production', // 🔥 Enables Redux DevTools in development
 })
 
+export const persistor = persistStore(store)

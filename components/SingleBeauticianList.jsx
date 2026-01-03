@@ -1,10 +1,14 @@
+import { Image, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import React from 'react';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+
 
 // styles
 import styles from '@/styles/styles';
+
+// images
+import defaultProfilePic from '@/assets/images/avatar/defaultProfilePic.png';
 
 const SingleBeauticianList = ({ beautician }) => {
     const router = useRouter();
@@ -17,13 +21,29 @@ const SingleBeauticianList = ({ beautician }) => {
         mobile
     } =beautician
 
+    // beautician image  display handling
+    const [imageFailed, setImageFailed] = useState(false);
+    
+    const resolvedProfilePic = imageFailed
+        ? defaultProfilePic :
+        profilePic
+            ?
+            { uri: profilePic }
+            : defaultProfilePic;
+    
     
     return (
         <View style={styles.listContainer}>
             <Image
-                source={profilePic}
+                source={resolvedProfilePic}
                 style={styles.listImage}
                 resizeMode='cover'
+                onError={() => {
+                    // fallback to default picture
+                    console.log("Image failed — switching to default");
+                    setImageFailed(true);
+                }}
+
             />
             <Text style={[styles.listTitle, styles.textSecondary]}>{fullName}</Text>
             <Text style={[styles.listText, styles.textGray, styles.textShadow]}>Position : {position}</Text>

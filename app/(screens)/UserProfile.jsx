@@ -1,12 +1,12 @@
 import { Link } from 'expo-router';
-import React from 'react';
+import React, { useCallback,useEffect } from 'react';
 import { Image, ScrollView, Text, View } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { showMessage } from 'react-native-flash-message';
 
 // images
 import landingpageimage from '@/assets/images/pages/landingpageimage.jpg';
-
-// data
-import { userProfileData } from '@/data/userProfileData';
 
 // styles
 import styles from '@/styles/styles';
@@ -15,19 +15,59 @@ import styles from '@/styles/styles';
 import getInitials from '@/utils/getInitials';
 
 // components
-import Footer from '@/components/Footer';
 import PageTitle from '@/components/PageTitle';
+import Spinner from '@/components/Spinner';
 import UserProfileTabs from '@/components/UserProfileTabs';
+import Footer from '@/components/Footer';
+
+// actions
+import { getProfile } from '@/store/profile/profileActions';
 
 
 const UserProfile = () => {
+    const dispatch = useDispatch();
 
-    const { fullName, email } = userProfileData;
     
-    const initials = getInitials(fullName);
-    
+    // auth redux states
+    const { userInfo } = useSelector(state => state.auth);
+   
+    // load profile on pressing screen
+    useFocusEffect(
+        useCallback(() => {
+            if (userInfo?.email) {
+                dispatch(getProfile({ email: userInfo.email }))
+            }
+        }, [dispatch, userInfo])
+    );
 
-    if (1) { // replace with redux/backend for profile
+    // profile redux
+    const { loading, profile, error } = useSelector(state => state.profile);
+
+    useEffect(() => {
+        if (error) {
+            showMessage({
+                message: error || 'An error occured',
+                type: 'danger'
+            })
+        }
+    }, [error]);
+    
+    
+    if (loading || !userInfo) {
+        return (
+            <View
+                style={[styles.container, { flex: 1 }]}
+                contentContainerStyle={styles.center}
+            >
+                <Spinner />
+            </View>
+        )
+    }
+    
+    else if (profile) { 
+        const { fullName, email } = profile;
+        const initials = getInitials(fullName);
+        
         return (
             <ScrollView style={styles.container}>
                 <PageTitle activeMenu='Profile' motherMenu='User' />
@@ -36,15 +76,15 @@ const UserProfile = () => {
                         <View style={[styles.cardShadow, { marginTop: 50 }]}>
                             <View style={[styles.cardBody, styles.center]}>
                                 <View style={[styles.initialsBg, styles.mediaGray, styles.initialsBgShadow]}>
-                                    <Text style={[styles.initialsBgText, styles.textGray, styles.textShadow]}>{initials}</Text>
+                                    <Text style={[styles.initialsBgText, styles.textGray, styles.textShadow]}>{initials||"DP"}</Text>
                                 </View>
                                 <View style={{ marginTop: 40 }}>
-                                    <Text style={[styles.cardBodyHeading,styles.textSecondary]}>{fullName}</Text>
+                                    <Text style={[styles.cardBodyHeading, styles.textSecondary]}>{fullName || "fullName"}</Text>
                                 </View>
                                 <View style={[styles.serialRow, { marginBottom: 8 }]}>
                                     <Text style={[styles.fieldHeading,styles.textGray]}>email Id</Text>
                                     <Text style={styles.textSecondary}> : </Text>
-                                    <Text style={styles.fieldText}>{email}</Text>
+                                    <Text style={styles.fieldText}>{email||"yourmail@domain"}</Text>
                                 </View>
                             </View>
                         </View>
@@ -70,7 +110,7 @@ const UserProfile = () => {
                     <View style={styles.column}>
                         <View style={styles.cardShadow}>
                             <View style={styles.cardBody}>
-                                <UserProfileTabs profile={userProfileData} />
+                                <UserProfileTabs profile={profile} />
                             </View>
                         </View>
                     </View>

@@ -1,131 +1,181 @@
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { Link } from 'expo-router';
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
-
+import { useFocusEffect } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { showMessage } from 'react-native-flash-message';
 // styles
 import styles from '@/styles/styles';
 
 // components
-import FooterUser from '@/components/Footer';
+import Spinner from '@/components/Spinner';
 import RadialDonut from '@/components/RadialDonut';
 import RecentShops from '@/components/RecenShops/RecentShops';
 import Recommendations from '@/components/Recommendations/Recommendations';
+import Footer from '@/components/Footer';
+
+// actions
+import { getProfile } from '@/store/profile/profileActions';
 
 const Dashboard = () => {
-  return (
-    <ScrollView
-      style={styles.container}
-    >
-      <View style={styles.row}>
-        {/* card 1 */}
-        <View style={styles.column}>
-          <TouchableOpacity>
-            <View style={[styles.dashCard, styles.dashBg1]}>
-              <View style={[styles.cardBody, styles.serialRow, styles.between]}>
-                <View style={{marginBottom:8}}>
-                  <Text style={[styles.dashCardCount, styles.textWhite]}>10</Text>
-                  <Text style={[styles.textWhite, styles.textBold]}>Upcoming Appointments</Text>
-                </View>
-                <View style={{marginBottom:8}}>
-                  <FontAwesome5 name='calendar-check' size={36} color="#fff" />
+  const dispatch = useDispatch();
+
+  // auth states
+  const { email } = useSelector(state => state.auth.userInfo);
+
+  // load profile on pressing screen
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(getProfile({ email }))
+    }, [dispatch, email])
+  );
+  
+  // profile redux
+  const { loading, profile, error } = useSelector(state => state.profile);
+
+  useEffect(() => {
+    if (error) {
+      showMessage({
+        message: error || 'An error occured',
+        type: 'danger'
+      })
+    }
+  }, [error]);
+
+  
+  if (loading) {
+    return (
+      <View
+        style={[styles.container, { flex: 1 }]}
+        contentContainerStyle={styles.center}
+      >
+        <Spinner />
+      </View>
+    )
+  }
+
+  else {
+    
+    return (
+      <ScrollView
+        style={styles.container}
+      >
+        <View style={styles.row}>
+          {/* card 1 */}
+          <View style={styles.column}>
+            <TouchableOpacity>
+              <View style={[styles.dashCard, styles.dashBg1]}>
+                <View style={[styles.cardBody, styles.serialRow, styles.between]}>
+                  <View style={{ marginBottom: 8 }}>
+                    <Text style={[styles.dashCardCount, styles.textWhite]}>10</Text>
+                    <Text style={[styles.textWhite, styles.textBold]}>Upcoming Appointments</Text>
+                  </View>
+                  <View style={{ marginBottom: 8 }}>
+                    <FontAwesome5 name='calendar-check' size={36} color="#fff" />
+                  </View>
                 </View>
               </View>
-            </View>
-          </TouchableOpacity>
-        </View>
-        {/* card 2 */}
-        <View style={styles.column}>
-          <TouchableOpacity>
-            <View style={[styles.dashCard, styles.dashBg2]}>
-              <View style={[styles.cardBody, styles.serialRow, styles.between]}>
-                <View style={{marginBottom:8}}>
-                  <Text style={[styles.dashCardCount, styles.textWhite]}>4</Text>
-                  <Text style={[styles.textWhite, styles.textBold]}>Pending Approvals</Text>
-                </View>
-                <View style={{marginBottom:8}}>
-                  <FontAwesome5 name='hourglass-half' size={36} color="#fff" />
+            </TouchableOpacity>
+          </View>
+          {/* card 2 */}
+          <View style={styles.column}>
+            <TouchableOpacity>
+              <View style={[styles.dashCard, styles.dashBg2]}>
+                <View style={[styles.cardBody, styles.serialRow, styles.between]}>
+                  <View style={{ marginBottom: 8 }}>
+                    <Text style={[styles.dashCardCount, styles.textWhite]}>4</Text>
+                    <Text style={[styles.textWhite, styles.textBold]}>Pending Approvals</Text>
+                  </View>
+                  <View style={{ marginBottom: 8 }}>
+                    <FontAwesome5 name='hourglass-half' size={36} color="#fff" />
+                  </View>
                 </View>
               </View>
-            </View>
-          </TouchableOpacity>
+            </TouchableOpacity>
           
-        </View>
-        {/* card 3 */}
-        <View style={styles.column}>
-          <TouchableOpacity>
-            <View style={[styles.dashCard, styles.dashBg3]}>
-              <View style={[styles.cardBody, styles.serialRow, styles.between]}>
-                <View style={{marginBottom:8}}>
-                  <Text style={[styles.dashCardCount, styles.textWhite]}>8</Text>
-                  <Text style={[styles.textWhite, styles.textBold]}>Offers & Discounts</Text>
-                </View>
-                <View style={{marginBottom:8}}>
-                  <FontAwesome5 name='tags' size={36} color="#fff" />
-                </View>
-              </View>
-            </View>
-          </TouchableOpacity>      
-        </View>
-         {/* card 4 */}
-        <View style={styles.column}>
-          <TouchableOpacity>
-            <View style={[styles.dashCard, styles.dashBg4]}>
-              <View style={[styles.cardBody, styles.serialRow, styles.between]}>
-                <View style={{marginBottom:8}}>
-                  <Text style={[styles.dashCardCount, styles.textWhite]}>15</Text>
-                  <Text style={[styles.textWhite, styles.textBold]}>Favorite Salons</Text>
-                </View>
-                <View style={{marginBottom:8}}>
-                  <FontAwesome name='heart' size={36} color="#fff" />
+          </View>
+          {/* card 3 */}
+          <View style={styles.column}>
+            <TouchableOpacity>
+              <View style={[styles.dashCard, styles.dashBg3]}>
+                <View style={[styles.cardBody, styles.serialRow, styles.between]}>
+                  <View style={{ marginBottom: 8 }}>
+                    <Text style={[styles.dashCardCount, styles.textWhite]}>8</Text>
+                    <Text style={[styles.textWhite, styles.textBold]}>Offers & Discounts</Text>
+                  </View>
+                  <View style={{ marginBottom: 8 }}>
+                    <FontAwesome5 name='tags' size={36} color="#fff" />
+                  </View>
                 </View>
               </View>
-            </View>
-          </TouchableOpacity>
-        </View>
+            </TouchableOpacity>
+          </View>
+          {/* card 4 */}
+          <View style={styles.column}>
+            <TouchableOpacity>
+              <View style={[styles.dashCard, styles.dashBg4]}>
+                <View style={[styles.cardBody, styles.serialRow, styles.between]}>
+                  <View style={{ marginBottom: 8 }}>
+                    <Text style={[styles.dashCardCount, styles.textWhite]}>15</Text>
+                    <Text style={[styles.textWhite, styles.textBold]}>Favorite Salons</Text>
+                  </View>
+                  <View style={{ marginBottom: 8 }}>
+                    <FontAwesome name='heart' size={36} color="#fff" />
+                  </View>
+                </View>
+              </View>
+            </TouchableOpacity>
+          </View>
         
-      </View>
-      <View style={styles.row}>
-        <View style={styles.column}>
-          <View style={styles.card}>
-            <View style={[styles.cardBody, styles.center]}>
-              <RadialDonut profileCompletion="50" />
-              <Text> Profile Completion</Text>
-              <View style={{ marginTop: 16 }}>
-                <Text style={[styles.cardBodyHeading, styles.textDanger]}>Your Profile is empty</Text>
-                <Link href='/(formsUser)/AddBasicProfile'>
-                  <Text style={[styles.textGray,styles.textCenter]}> Click Here to Fill up Your Profile </Text>
-                </Link>
+        </View>
+        <View style={styles.row}>
+          <View style={styles.column}>
+            <View style={styles.card}>
+              <View style={[styles.cardBody, styles.center]}>
+                <RadialDonut profileCompletion={profile ? profile.profileCompletion : "0"} />
+                <Text style={styles.subHeading}> Profile Completion</Text>
+                {
+                  !profile ?
+                    <View style={{ marginTop: 16 }}>
+                      <Text style={[styles.cardBodyHeading, styles.textDanger]}>Your Profile is empty</Text>
+                      <Link href='/(forms)/AddBasicProfile'>
+                        <Text style={[styles.textGray, styles.textCenter]}> Click Here to Fill up Your Profile </Text>
+                      </Link>
+                    </View>
+                    : ""
+                }
+                
               </View>
             </View>
           </View>
         </View>
-      </View>
 
-      <View style={styles.row}>
-        <View style={styles.column}>
-          <View style={styles.card}>
-            <View style={styles.cardBody}>
-              <Text style={styles.cardBodySubHeading}>Recommended for You</Text>
-              <Recommendations />
+        <View style={styles.row}>
+          <View style={styles.column}>
+            <View style={styles.card}>
+              <View style={styles.cardBody}>
+                <Text style={styles.cardBodySubHeading}>Recommended for You</Text>
+                <Recommendations />
+              </View>
             </View>
           </View>
         </View>
-      </View>
 
-      <View style={styles.row}>
-        <View style={styles.column}>
-          <View style={styles.card}>
-            <View style={styles.cardBody}>
-              <Text style={styles.cardBodySubHeading}>Recently Visited Shops</Text>
-              <RecentShops />
+        <View style={styles.row}>
+          <View style={styles.column}>
+            <View style={styles.card}>
+              <View style={styles.cardBody}>
+                <Text style={styles.cardBodySubHeading}>Recently Visited Shops</Text>
+                <RecentShops />
+              </View>
             </View>
           </View>
         </View>
-      </View>
-      <FooterUser />
-    </ScrollView>
-  )
+        <Footer />
+      </ScrollView>
+    )
+  }
 }
 
 

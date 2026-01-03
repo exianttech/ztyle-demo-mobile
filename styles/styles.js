@@ -188,7 +188,14 @@ const styles = StyleSheet.create({
     alertContainer: {
         justifyContent: 'center',
         alignItems: "center",
-        marginVertical: 8
+        marginVertical: 8,
+    },
+    centerAlertContainer: {
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: "center",
+        padding: 12
+
     },
     alert: {
         width: "100%",
@@ -778,6 +785,15 @@ const styles = StyleSheet.create({
     star: {
         marginRight: 4 
     },
+    ratingContainer: {
+        flexDirection: "row",
+        justifyContent: "center",
+        marginVertical: 10,
+    },
+    rateStar: {
+        fontSize: 40, // ≈ 2.5rem
+        marginHorizontal: 8,
+    },
     
     // latest booking
     squareInitials: {
@@ -918,7 +934,13 @@ const styles = StyleSheet.create({
     modalConfirm: {
         backgroundColor: '#20c997'
     },
-
+    modalConfirmDanger: {
+        backgroundColor: '#FF6746'
+    },
+    modalConfirmWarning: {
+        backgroundColor: '#FFC368'
+    },
+    
     // footer
 
     // modal

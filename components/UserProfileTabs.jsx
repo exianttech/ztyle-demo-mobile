@@ -1,6 +1,7 @@
 import { Link } from 'expo-router';
 import React, { useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { useDispatch } from 'react-redux';
 
 // data
 import { monthdata } from '@/data/monthData';
@@ -12,23 +13,31 @@ import styles from '@/styles/styles';
 import getAddressLines from '@/utils/getAddressLines';
 
 // components
-import BasicModal from './Modals/BasicModal';
+import DangerModal from './Modals/DangerModal';
+
+// actions
+import { deleteProfile } from '@/store/profile/profileActions';
+
 
 const UserProfileTabs = ({ profile }) => {
-    
+    const dispatch = useDispatch();
+
     // destructure
-    const { dob,
+    const { _id,
+        dob,
         fullName,
         email,
-        address,
         mobile } = profile;
+    
+
     
     // format to display
     const dateOfBirth = new Date(dob);
     const dobDay = dateOfBirth.getDate();
     const dobMonth = dateOfBirth.getMonth();
     const dobYear = dateOfBirth.getFullYear();
-    const addressLines = getAddressLines(address)
+    // transfer to addresses
+    // const addressLines = getAddressLines(address)
     
     // select tabs
     const [activeTab, setactiveTab] = useState("profile");
@@ -38,8 +47,7 @@ const UserProfileTabs = ({ profile }) => {
 
     const handleDelete = () => {
         setmodalVisible(false);
-        console.log("profile deleted")
-        // replace backend
+        dispatch(deleteProfile({ id: _id }));
     }
 
     
@@ -68,7 +76,9 @@ const UserProfileTabs = ({ profile }) => {
                                 <Text style={styles.textSecondary}> : </Text>
                                 <Text style={styles.fieldText}>{dobDay} - {monthdata[dobMonth]} - {dobYear}</Text>
                             </View>
-                            <View style={[styles.serialRow, { marginBottom: 8, alignItems: 'flex-start' }]}>
+
+                            {/*  refer here for address tab
+                               <View style={[styles.serialRow, { marginBottom: 8, alignItems: 'flex-start' }]}>
                                 <Text style={styles.fieldHeading}>Residential Address</Text>
                                 <Text style={styles.textSecondary}> : </Text>
                                 <View style={{ flexDirection: 'column' }}>
@@ -78,7 +88,7 @@ const UserProfileTabs = ({ profile }) => {
                                         ))
                                     }
                                 </View>
-                            </View>
+                            </View> */}
                             <View style={[styles.serialRow, { marginBottom: 8 }]}>
                                 <Text style={styles.fieldHeading}>Mobile Number</Text>
                                 <Text style={styles.textSecondary}> : </Text>
@@ -100,7 +110,7 @@ const UserProfileTabs = ({ profile }) => {
                                 <View style={styles.alertContainer}>
                                     <View style={[styles.alert, styles.secondary]}>
                                         <Text style={[styles.alertText, styles.alertTextBold]}>Edit Your Basic Profile</Text>
-                                        <Link href='/(forms)/AddBasicProfile'>
+                                        <Link href='/(forms)/EditBasicProfile'>
                                             <Text style={styles.alertText}>click here to edit your basic profile</Text>
                                         </Link>
                                     </View>
@@ -116,11 +126,11 @@ const UserProfileTabs = ({ profile }) => {
                                             <Text style={styles.alertText}>click here to delete your profile</Text>
                                         </TouchableOpacity>
                                         {/* Modal */}
-                                        <BasicModal
+                                        <DangerModal
                                             visible={modalVisible}
                                             onClose={() => setmodalVisible(false)}
                                             onConfirm={handleDelete}
-                                            title="Are you sure you want to delete?"
+                                            title="Are You Sure You want to Confirm This Slot"
                                             message="Click Delete if you still want to delete your profile. Otherwise click Close."
                                             confirmText='Delete'
                                             cancelText='Close'

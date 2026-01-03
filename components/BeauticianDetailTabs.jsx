@@ -34,6 +34,9 @@ const BeauticianDetailTabs = ({beautician}) => {
     // select tabs
     const [activeTab, setactiveTab] = useState("basicProfile");
 
+    const hasSlots = Array.isArray(availableSlots) && availableSlots.length > 0;
+
+
     const renderedContent = () => {
         switch (activeTab) {
             case "basicProfile":
@@ -128,8 +131,8 @@ const BeauticianDetailTabs = ({beautician}) => {
                     <View style={styles.cardShadow}>
                         <View style={styles.cardBody}>
                             {
-                                // check existence of advance profile status
-                                advanceProfileStatus ? (
+                                // check existence of slots
+                                hasSlots ? (
                                     <>
                                         <View style={{ marginBottom: 8 }}>
                                             <Text style={[styles.cardBodySubHeading, styles.textSecondary]}>Time Slots For Booking : Working Day</Text>

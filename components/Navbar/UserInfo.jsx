@@ -2,9 +2,17 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Pressable, Text, TouchableOpacity, View } from 'react-native';
+import { useSelector } from 'react-redux';
 
 //styles
 import styles from '@/styles/styles';
+
+// utils
+import getInitials from '@/utils/getInitials';
+
+// components
+import Logout from '../Logout'
+
 
 const UserInfo = () => {
   const router = useRouter();
@@ -13,6 +21,13 @@ const UserInfo = () => {
   const [showMenu, setshowMenu] = useState(false);
   const toggleMenu = () => setshowMenu(prev => !prev);
 
+  // auth redux 
+  const { userInfo } = useSelector(state => state.auth);
+  
+  
+  const initials = userInfo?.fullName
+    ? getInitials(userInfo.fullName)
+    : "";
   
 
   return (
@@ -22,7 +37,7 @@ const UserInfo = () => {
         {/* Avatar */}
         <TouchableOpacity onPress={toggleMenu}>
           <View style={[styles.initialsBg, styles.mediaSecondary,styles.shadow]}>
-            <Text style={[styles.initialsBgText, styles.textSecondary]}>C K</Text>
+            <Text style={[styles.initialsBgText, styles.textSecondary]}>{ initials}</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -52,10 +67,7 @@ const UserInfo = () => {
                   <Text style={styles.dropdownText}>Inbox</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.dropdownItem}>
-                  <FontAwesome name="sign-out" size={16} color='#FF6746' />
-                  <Text style={styles.dropdownText}>Logout</Text>
-                </TouchableOpacity>
+                <Logout />
               
               </Pressable>
             </Pressable>
